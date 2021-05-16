@@ -1,6 +1,6 @@
 from airflow import DAG
 from datetime import datetime, timedelta
-from airflow.contrib.operators.kubernetes_pod_operator import KubernetesPodOperator
+from airflow.providers.cncf.kubernetes.operators.kubernetes_pod import KubernetesPodOperator
 from airflow.operators.dummy_operator import DummyOperator
 
 
@@ -22,9 +22,7 @@ dag = DAG(
 )
 
 
-start = DummyOperator(task_id="run_this_first", dag=dag)
-
-passing = KubernetesPodOperator(
+start = KubernetesPodOperator(
     namespace="dataserver",
     image="Python:3.6",
     cmds=["Python", "-c"],
@@ -36,4 +34,4 @@ passing = KubernetesPodOperator(
     dag=dag,
 )
 
-start >> passing
+start
