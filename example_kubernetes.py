@@ -25,7 +25,7 @@ dag = DAG(
 start = DummyOperator(task_id="run_this_first", dag=dag)
 
 passing = KubernetesPodOperator(
-    namespace="dataserv er",
+    namespace="dataserver",
     image="Python:3.6",
     cmds=["Python", "-c"],
     arguments=["print('hello world')"],
