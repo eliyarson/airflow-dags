@@ -7,12 +7,12 @@ from airflow.operators.dummy_operator import DummyOperator
 default_args = {
     "owner": "airflow",
     "depends_on_past": False,
-    "start_date": datetime.utcnow(),
+    "start_date": "2021-01-01",
     "email": ["airflow@example.com"],
     "email_on_failure": False,
     "email_on_retry": False,
     "retries": 0,
-    "retry_delay": timedelta(minutes=5),
+    "retry_delay": timedelta(minutes=1),
 }
 
 dag = DAG(
