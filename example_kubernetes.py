@@ -7,7 +7,7 @@ from airflow.operators.dummy_operator import DummyOperator
 default_args = {
     "owner": "airflow",
     "depends_on_past": False,
-    "start_date": "2021-01-01",
+    "start_date": datetime.utcnow(),
     "email": ["airflow@example.com"],
     "email_on_failure": False,
     "email_on_retry": False,
@@ -36,4 +36,4 @@ passing = KubernetesPodOperator(
     dag=dag,
 )
 
-passing.set_upstream(start)
+start >> passing
