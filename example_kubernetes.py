@@ -51,7 +51,7 @@ from airflow.utils.dates import days_ago
 #    k8s.V1VolumeMount(mount_path='/etc/foo', name='test-volume', sub_path=None, read_only=True)
 #]
 
-init_environments = [k8s.V1EnvVar(name='key1', value='value1'), k8s.V1EnvVar(name='key2', value='value2')]
+#init_environments = [k8s.V1EnvVar(name='key1', value='value1'), k8s.V1EnvVar(name='key2', value='value2')]
 
 #init_container = k8s.V1Container(
 #    name="init-container",
@@ -84,6 +84,7 @@ with DAG(
         cmds=["bash", "-cx"],
         arguments=["echo", "10"],
         labels={"foo": "bar"},
+        image_pull_secrets='registrykey',
 #        secrets=[secret_file, secret_env, secret_all_keys],
 #        ports=[port],
 #        volumes=[volume],
@@ -113,22 +114,3 @@ with DAG(
 #        get_logs=True,
 #    )
     # [END howto_operator_k8s_private_image]
-
-    # [START howto_operator_k8s_write_xcom]
-    write_xcom = KubernetesPodOperator(
-        namespace='airflow',
-        image='alpine',
-        cmds=["sh", "-c", "mkdir -p /airflow/xcom/;echo '[1,2,3,4]' > /airflow/xcom/return.json"],
-        name="write-xcom",
-        do_xcom_push=True,
-        is_delete_operator_pod=True,
-        in_cluster=True,
-        task_id="write-xcom",
-        get_logs=True,
-    )
-
-    pod_task_xcom_result = BashOperator(
-        bash_command="echo \"{{ task_instance.xcom_pull('write-xcom')[0] }}\"",
-        task_id="pod_task_xcom_result",
-    )
-    # [END howto_operator_k8s_write_xcom]
