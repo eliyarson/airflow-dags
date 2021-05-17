@@ -62,37 +62,7 @@ init_container = k8s.V1Container(
     args=["echo 10"],
 )
 
-affinity = k8s.V1Affinity(
-    node_affinity=k8s.V1NodeAffinity(
-        preferred_during_scheduling_ignored_during_execution=[
-            k8s.V1PreferredSchedulingTerm(
-                weight=1,
-                preference=k8s.V1NodeSelectorTerm(
-                    match_expressions=[
-                        k8s.V1NodeSelectorRequirement(key="disktype", operator="in", values=["ssd"])
-                    ]
-                ),
-            )
-        ]
-    ),
-    pod_affinity=k8s.V1PodAffinity(
-        required_during_scheduling_ignored_during_execution=[
-            k8s.V1WeightedPodAffinityTerm(
-                weight=1,
-                pod_affinity_term=k8s.V1PodAffinityTerm(
-                    label_selector=k8s.V1LabelSelector(
-                        match_expressions=[
-                            k8s.V1LabelSelectorRequirement(key="security", operator="In", values="S1")
-                        ]
-                    ),
-                    topology_key="failure-domain.beta.kubernetes.io/zone",
-                ),
-            )
-        ]
-    ),
-)
-
-tolerations = [k8s.V1Toleration(key="key", operator="Equal", value="value")]
+#tolerations = [k8s.V1Toleration(key="key", operator="Equal", value="value")]
 
 # [END howto_operator_k8s_cluster_resources]
 
@@ -121,27 +91,27 @@ with DAG(
         env_from=configmaps,
         name="airflow-test-pod",
         task_id="task",
-        affinity=affinity,
+#        affinity=affinity,
         is_delete_operator_pod=True,
         hostnetwork=False,
-        tolerations=tolerations,
+#        tolerations=tolerations,
         init_containers=[init_container],
     )
 
     # [START howto_operator_k8s_private_image]
-    quay_k8s = KubernetesPodOperator(
-        namespace='airflow',
-        image='quay.io/apache/bash',
-        image_pull_secrets=[k8s.V1LocalObjectReference('testquay')],
-        cmds=["bash", "-cx"],
-        arguments=["echo", "10", "echo pwd"],
-        labels={"foo": "bar"},
-        name="airflow-private-image-pod",
-        is_delete_operator_pod=True,
-        in_cluster=True,
-        task_id="task-two",
-        get_logs=True,
-    )
+#    quay_k8s = KubernetesPodOperator(
+#        namespace='airflow',
+#        image='quay.io/apache/bash',
+#        image_pull_secrets=[k8s.V1LocalObjectReference('testquay')],
+#        cmds=["bash", "-cx"],
+#        arguments=["echo", "10", "echo pwd"],
+#        labels={"foo": "bar"},
+#        name="airflow-private-image-pod",
+#        is_delete_operator_pod=True,
+#        in_cluster=True,
+#        task_id="task-two",
+#        get_logs=True,
+#    )
     # [END howto_operator_k8s_private_image]
 
     # [START howto_operator_k8s_write_xcom]
