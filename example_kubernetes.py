@@ -28,39 +28,39 @@ from airflow.providers.cncf.kubernetes.operators.kubernetes_pod import Kubernete
 from airflow.utils.dates import days_ago
 
 # [START howto_operator_k8s_cluster_resources]
-secret_file = Secret('volume', '/etc/sql_conn', 'airflow-secrets', 'sql_alchemy_conn')
-secret_env = Secret('env', 'SQL_CONN', 'airflow-secrets', 'sql_alchemy_conn')
-secret_all_keys = Secret('env', None, 'airflow-secrets-2')
-volume_mount = k8s.V1VolumeMount(
-    name='test-volume', mount_path='/root/mount_file', sub_path=None, read_only=True
-)
+#secret_file = Secret('volume', '/etc/sql_conn', 'airflow-secrets', 'sql_alchemy_conn')
+#secret_env = Secret('env', 'SQL_CONN', 'airflow-secrets', 'sql_alchemy_conn')
+#secret_all_keys = Secret('env', None, 'airflow-secrets-2')
+#volume_mount = k8s.V1VolumeMount(
+#    name='test-volume', mount_path='/root/mount_file', sub_path=None, read_only=True
+#)
 
-configmaps = [
-    k8s.V1EnvFromSource(config_map_ref=k8s.V1ConfigMapEnvSource(name='test-configmap-1')),
-    k8s.V1EnvFromSource(config_map_ref=k8s.V1ConfigMapEnvSource(name='test-configmap-2')),
-]
+#configmaps = [
+#    k8s.V1EnvFromSource(config_map_ref=k8s.V1ConfigMapEnvSource(name='test-configmap-1')),
+#    k8s.V1EnvFromSource(config_map_ref=k8s.V1ConfigMapEnvSource(name='test-configmap-2')),
+#]
 
-volume = k8s.V1Volume(
-    name='test-volume',
-    persistent_volume_claim=k8s.V1PersistentVolumeClaimVolumeSource(claim_name='test-volume'),
-)
+#volume = k8s.V1Volume(
+#    name='test-volume',
+#    persistent_volume_claim=k8s.V1PersistentVolumeClaimVolumeSource(claim_name='test-volume'),
+#)
 
-port = k8s.V1ContainerPort(name='http', container_port=80)
+#port = k8s.V1ContainerPort(name='http', container_port=80)
 
-init_container_volume_mounts = [
-    k8s.V1VolumeMount(mount_path='/etc/foo', name='test-volume', sub_path=None, read_only=True)
-]
+#init_container_volume_mounts = [
+#    k8s.V1VolumeMount(mount_path='/etc/foo', name='test-volume', sub_path=None, read_only=True)
+#]
 
 init_environments = [k8s.V1EnvVar(name='key1', value='value1'), k8s.V1EnvVar(name='key2', value='value2')]
 
-init_container = k8s.V1Container(
-    name="init-container",
-    image="ubuntu:16.04",
-    env=init_environments,
-    volume_mounts=init_container_volume_mounts,
-    command=["bash", "-cx"],
-    args=["echo 10"],
-)
+#init_container = k8s.V1Container(
+#    name="init-container",
+#    image="ubuntu:16.04",
+#    env=init_environments,
+#    volume_mounts=init_container_volume_mounts,
+#    command=["bash", "-cx"],
+#    args=["echo 10"],
+#)
 
 #tolerations = [k8s.V1Toleration(key="key", operator="Equal", value="value")]
 
@@ -84,18 +84,18 @@ with DAG(
         cmds=["bash", "-cx"],
         arguments=["echo", "10"],
         labels={"foo": "bar"},
-        secrets=[secret_file, secret_env, secret_all_keys],
-        ports=[port],
-        volumes=[volume],
-        volume_mounts=[volume_mount],
-        env_from=configmaps,
+#        secrets=[secret_file, secret_env, secret_all_keys],
+#        ports=[port],
+#        volumes=[volume],
+#        volume_mounts=[volume_mount],
+#        env_from=configmaps,
         name="airflow-test-pod",
         task_id="task",
 #        affinity=affinity,
         is_delete_operator_pod=True,
         hostnetwork=False,
 #        tolerations=tolerations,
-        init_containers=[init_container],
+#        init_containers=[init_container],
     )
 
     # [START howto_operator_k8s_private_image]
