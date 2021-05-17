@@ -80,7 +80,7 @@ with DAG(
 ) as dag:
     k = KubernetesPodOperator(
         namespace='airflow',
-        image="ubuntu:16.04",
+        image="gcr.io/meliuz-poc-data-lake/quickstart-image",
         cmds=["bash", "-cx"],
         arguments=["echo", "10"],
         labels={"foo": "bar"},
