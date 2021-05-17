@@ -80,9 +80,9 @@ with DAG(
 ) as dag:
     k = KubernetesPodOperator(
         namespace='airflow',
-        image="gcr.io/meliuz-poc-data-lake/quickstart-image:tag1",
-        cmds=["bash", "-cx"],
-        arguments=["echo", "10"],
+        image="gcr.io/meliuz-poc-data-lake/dbt:latest",
+#        cmds=["bash", "-cx"],
+        arguments=["run", "--target dev-airflow"],
         labels={"foo": "bar"},
         image_pull_secrets='registrykey',
 #        secrets=[secret_file, secret_env, secret_all_keys],
