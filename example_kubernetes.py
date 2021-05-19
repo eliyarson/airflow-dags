@@ -104,6 +104,7 @@ with DAG(
         arguments=["dbt run --profiles-dir /dbt --target dev-airflow"],
         labels={"foo": "bar"},
         image_pull_secrets='registrykey',
+        image_pull_policy='always',
 #        secrets=[secret_file, secret_env, secret_all_keys],
 #        ports=[port],
 #        volumes=[volume],
