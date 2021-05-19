@@ -101,7 +101,7 @@ with DAG(
         namespace='airflow',
         image="gcr.io/meliuz-poc-data-lake/dbt:latest",
         cmds=["bash","-cx"],
-        arguments=["dbt run --target dev-airflow"],
+        arguments=["dbt run --profiles-dir /dbt --target dev-airflow"],
         labels={"foo": "bar"},
         image_pull_secrets='registrykey',
 #        secrets=[secret_file, secret_env, secret_all_keys],
