@@ -100,8 +100,8 @@ with DAG(
     k = KubernetesPodOperator(
         namespace='airflow',
         image="gcr.io/meliuz-poc-data-lake/dbt:latest",
-        cmds=["dbt"],
-        arguments=["run --target dev-airflow"],
+        cmds=["bash","-cx"],
+        arguments=["dbt run --target dev-airflow"],
         labels={"foo": "bar"},
         image_pull_secrets='registrykey',
 #        secrets=[secret_file, secret_env, secret_all_keys],
