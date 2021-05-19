@@ -66,6 +66,25 @@ from airflow.utils.dates import days_ago
 
 # [END howto_operator_k8s_cluster_resources]
 
+#secret_env = secret.Secret(
+#    # Expose the secret as environment variable.
+#    deploy_type='env',
+#    # The name of the environment variable, since deploy_type is `env` rather
+#    # than `volume`.
+#    deploy_target='SQL_CONN',
+#    # Name of the Kubernetes Secret
+#    secret='airflow-secrets',
+#    # Key of a secret stored in this Secret object
+#    key='sql_alchemy_conn')
+#secret_volume = secret.Secret(
+#    deploy_type='volume',
+#    # Path where we mount the secret as volume
+#    deploy_target='/var/secrets/google',
+#    # Name of Kubernetes Secret
+#    secret='service-account',
+#    # Key in the form of service account file name
+#    key='service-account.json')
+
 
 default_args = {
     'owner': 'airflow',
@@ -81,8 +100,8 @@ with DAG(
     k = KubernetesPodOperator(
         namespace='airflow',
         image="gcr.io/meliuz-poc-data-lake/dbt:latest",
-#        cmds=["bash", "-cx"],
-        arguments=["run --target dev-airflow"],
+        cmds=["bash", "-cx"],
+        arguments=["dbt run --target dev-airflow"],
         labels={"foo": "bar"},
         image_pull_secrets='registrykey',
 #        secrets=[secret_file, secret_env, secret_all_keys],
